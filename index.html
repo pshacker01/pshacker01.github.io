@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A. McCormack - CS 499 ePortfolio</title>
+    <title>Anthony McCormack - CS 499 ePortfolio</title>
     <style>
         * {
             margin: 0;
@@ -246,33 +246,53 @@
 
             <div class="artifact-card">
                 <h4>Thermostat.py - Embedded Systems Temperature Controller</h4>
-                <p>This artifact demonstrates my skills in software design and engineering through a Python-based thermostat control system I originally developed in CS 350.</p>
+                <p>A Python-based environmental control system that interfaces with a Raspberry Pi to poll an AHTx0 temperature and humidity sensor, manages a three-state thermostat (off, heat, cool), and outputs real-time data to a 16x2 LCD display.</p>
                 <a href="Thermostat.py" class="btn">View Source Code</a>
             </div>
 
             <h3>Enhancements Made:</h3>
             <ul>
-                <li>Improved code structure and modularity</li>
-                <li>Added input validation and error handling</li>
-                <li>Implemented design patterns for maintainability</li>
+                <li>Refactored procedural structure into modular, object-oriented design</li>
+                <li>Transformed hardcoded GPIO pin mappings into configurable parameters</li>
+                <li>Implemented the Observer Pattern to decouple sensor logic from display and LED feedback</li>
+                <li>Updated documentation to professional standards with PEP 8 formatting</li>
             </ul>
+
+            <h3>Narrative:</h3>
+            <p>The artifact I selected for this enhancement is a Python-based environmental control system, originally developed during my coursework in CS 350. At its core, the program interfaces with a Raspberry Pi to poll an AHTx0 temperature and humidity sensor, manages a three-state thermostat (off, heat, cool), and outputs real-time data to a 16x2 LCD display. It also handles hardware interrupts via physical buttons to cycle states and adjust temperature setpoints.</p>
+
+            <p>I chose to include this artifact in my ePortfolio because it represents a complex integration of hardware abstraction and software logic. In my professional role as a Programmer Analyst at Amazon, I see firsthand how critical it is to move beyond simple scripting and into robust software engineering. This project showcases my ability to manage state machines and threaded processes. To improve the artifact, I focused on reducing technical debt by refactoring the original procedural structure into a modular, object-oriented design.</p>
+
+            <p>Through these enhancements, I met the planned course outcomes. For CS-499-04 (Software Engineering and Design), I implemented the Observer Pattern to decouple the temperature sensor logic from the display and LED feedback systems, ensuring that adding new features won't require a total rewrite of the core sensor logic. For CS-499-02 (Communications), I updated the internal documentation to meet professional standards, including a detailed change history and consistent PEP 8 formatting.</p>
+
+            <p>The process of refactoring this artifact was an exercise in planning for scalability. One of the primary challenges I faced was managing the threading for the pulsing LED indicators without interfering with the timing of the I2C sensor polling. I learned that while procedural code is often easier to write initially, an object-oriented approach provides the stability needed for long-term maintenance. This project reinforced my security mindset as I implemented more robust error traps to handle potential hardware failures or sensor noise.</p>
         </section>
 
         <section id="algorithms">
             <h2>Artifact Two: Algorithms and Data Structures</h2>
 
             <div class="artifact-card">
-                <h4>DataGridActivity.java - Android Data Display Component</h4>
-                <p>This artifact showcases my understanding of algorithms and data structures through efficient data handling and display logic.</p>
+                <h4>DataGridActivity.java - Android Inventory Manager</h4>
+                <p>An Android mobile app that enables users to manage inventory items through CRUD operations with a SQLite database backend, enhanced with optimized data structures and sorting algorithms.</p>
                 <a href="DataGridActivity.java" class="btn">View Source Code</a>
             </div>
 
             <h3>Enhancements Made:</h3>
             <ul>
-                <li>Optimized data retrieval algorithms</li>
-                <li>Improved sorting and filtering functionality</li>
-                <li>Enhanced memory efficiency</li>
+                <li>HashMap implementation for O(1) lookups (improved from O(n) ArrayList iteration)</li>
+                <li>Custom MergeSort algorithm with guaranteed O(n log n) stable sorting</li>
+                <li>Dual-structure synchronization maintaining data integrity across HashMap and ArrayList</li>
+                <li>Documented Big-O notation in Javadoc comments with justified design decisions</li>
             </ul>
+
+            <h3>Narrative:</h3>
+            <p>The artifact is the Inventory Manager application (DataGridActivity.java), originally developed during CS 360: Mobile Architecture and Programming. The application was created as an Android mobile app that enables users to manage inventory items through CRUD operations with a SQLite database backend. The original implementation used a simple ArrayList for in-memory data management and relied on Android's default sorting mechanisms.</p>
+
+            <p>I selected this artifact for my ePortfolio because it provided an ideal foundation to demonstrate proficiency in algorithms and data structures. The original code, while functional, had measurable inefficiencies that presented clear opportunities for optimization. By introducing a HashMap that maps item IDs to their objects, lookups now execute in constant time O(1) instead of the original O(n) iteration. This improvement becomes increasingly significant as inventory size grows.</p>
+
+            <p>Rather than relying on built-in sorting or implementing a simpler but less efficient algorithm like Bubble Sort O(n²), I implemented MergeSort from scratch. This provides O(n log n) time complexity in all cases, maintains stability by preserving the relative order of items with equal titles, and demonstrates understanding of recursive divide-and-conquer problem decomposition.</p>
+
+            <p>Implementing the HashMap alongside the ArrayList taught me that optimization often involves trade-offs. The HashMap provides O(1) lookups but requires additional memory and synchronization overhead. Understanding when this trade-off is worthwhile versus when it adds unnecessary complexity is a critical skill. The challenges I faced included ensuring the ArrayList and HashMap remained consistent after operations, and careful handling of edge cases in the merge logic. This enhancement transformed a functional but inefficient inventory manager into a demonstration of algorithmic best practices.</p>
         </section>
 
         <section id="databases">
@@ -293,7 +313,7 @@
             </ul>
 
             <h3>Narrative:</h3>
-            <p>The artifact is DatabaseHelper.java, the data access layer for an Android inventory management application I developed during CS 360: Mobile Architecture and Programming in 2024. This class manages all SQLite database operations including user authentication and inventory CRUD functionality.</p>
+            <p>The artifact is DatabaseHelper.java, the data access layer for an Android inventory management application I developed during CS 360: Mobile Architecture and Programming in 2025. This class manages all SQLite database operations including user authentication and inventory CRUD functionality.</p>
 
             <p>I selected this artifact because it demonstrates growth in database design and security implementation. I improved it by normalizing the schema to Third Normal Form with a separate categories table linked via foreign key, implementing BCrypt password hashing to eliminate plain text password storage, ensuring all queries use SQL parameterization to prevent injection attacks, and adding try-catch-finally blocks with proper cursor cleanup for defensive programming.</p>
 
