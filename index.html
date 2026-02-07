@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A. McCormack - CS 499 ePortfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 4px solid #e94560;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #0f3460;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #e94560;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        section h2 {
+            color: #0f3460;
+            border-bottom: 3px solid #e94560;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        section h3 {
+            color: #16213e;
+            margin: 20px 0 10px 0;
+        }
+
+        .artifact-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #e94560;
+        }
+
+        .artifact-card h4 {
+            color: #0f3460;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #e94560;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #0f3460;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        footer {
+            background: #0f3460;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        footer a {
+            color: #e94560;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .skill-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-top: 3px solid #e94560;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>A. McCormack</h1>
+        <p>CS 499 Computer Science Capstone ePortfolio</p>
+        <p>Southern New Hampshire University</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#code-review">Code Review</a></li>
+            <li><a href="#software-engineering">Software Engineering</a></li>
+            <li><a href="#algorithms">Algorithms</a></li>
+            <li><a href="#databases">Databases</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="about">
+            <h2>Professional Self-Assessment</h2>
+            <p>Welcome to my ePortfolio. This portfolio represents the culmination of my journey through the Computer Science program at Southern New Hampshire University. Throughout this program, I have developed skills in software engineering, database management, algorithm design, and security implementation that prepare me for a career in software development.</p>
+
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <strong>Software Engineering</strong>
+                    <p>Design patterns, modular architecture</p>
+                </div>
+                <div class="skill-item">
+                    <strong>Databases</strong>
+                    <p>SQL, normalization, security</p>
+                </div>
+                <div class="skill-item">
+                    <strong>Algorithms</strong>
+                    <p>Data structures, optimization</p>
+                </div>
+                <div class="skill-item">
+                    <strong>Security</strong>
+                    <p>BCrypt, injection prevention</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="code-review">
+            <h2>Code Review</h2>
+            <p>Before enhancing my artifacts, I conducted a comprehensive code review to identify areas for improvement in security, functionality, and design.</p>
+
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </section>
+
+        <section id="software-engineering">
+            <h2>Artifact One: Software Design and Engineering</h2>
+
+            <div class="artifact-card">
+                <h4>Thermostat.py - Embedded Systems Temperature Controller</h4>
+                <p>This artifact demonstrates my skills in software design and engineering through a Python-based thermostat control system I originally developed in CS 350.</p>
+                <a href="Thermostat.py" class="btn">View Source Code</a>
+            </div>
+
+            <h3>Enhancements Made:</h3>
+            <ul>
+                <li>Improved code structure and modularity</li>
+                <li>Added input validation and error handling</li>
+                <li>Implemented design patterns for maintainability</li>
+            </ul>
+        </section>
+
+        <section id="algorithms">
+            <h2>Artifact Two: Algorithms and Data Structures</h2>
+
+            <div class="artifact-card">
+                <h4>DataGridActivity.java - Android Data Display Component</h4>
+                <p>This artifact showcases my understanding of algorithms and data structures through efficient data handling and display logic.</p>
+                <a href="DataGridActivity.java" class="btn">View Source Code</a>
+            </div>
+
+            <h3>Enhancements Made:</h3>
+            <ul>
+                <li>Optimized data retrieval algorithms</li>
+                <li>Improved sorting and filtering functionality</li>
+                <li>Enhanced memory efficiency</li>
+            </ul>
+        </section>
+
+        <section id="databases">
+            <h2>Artifact Three: Databases</h2>
+
+            <div class="artifact-card">
+                <h4>DatabaseHelper.java - Secure SQLite Database Manager</h4>
+                <p>This artifact demonstrates my skills in database design and security implementation for an Android inventory management application I originally developed in CS 360.</p>
+                <a href="DatabaseHelper.java" class="btn">View Source Code</a>
+            </div>
+
+            <h3>Enhancements Made:</h3>
+            <ul>
+                <li>Normalized schema to Third Normal Form (3NF) with categories table</li>
+                <li>Implemented BCrypt password hashing (no plain text storage)</li>
+                <li>Added SQL parameterization to prevent injection attacks</li>
+                <li>Wrapped operations in try-catch-finally for defensive programming</li>
+            </ul>
+
+            <h3>Narrative:</h3>
+            <p>The artifact is DatabaseHelper.java, the data access layer for an Android inventory management application I developed during CS 360: Mobile Architecture and Programming in 2024. This class manages all SQLite database operations including user authentication and inventory CRUD functionality.</p>
+
+            <p>I selected this artifact because it demonstrates growth in database design and security implementation. I improved it by normalizing the schema to Third Normal Form with a separate categories table linked via foreign key, implementing BCrypt password hashing to eliminate plain text password storage, ensuring all queries use SQL parameterization to prevent injection attacks, and adding try-catch-finally blocks with proper cursor cleanup for defensive programming.</p>
+
+            <p>These enhancements meet the outcomes I planned in Module One. For CS-499-04, I applied well-founded techniques including BCrypt hashing, SQL parameterization, and 3NF normalization. For CS-499-05, I developed a security mindset by anticipating SQL injection, credential theft, and timing attacks in my design decisions.</p>
+
+            <p>Through this process, I learned why best practices matter beyond just knowing what they are. Implementing BCrypt taught me the security-performance tradeoff of work factors, and schema refactoring required thinking through real usage scenarios. The main challenge was maintaining backward compatibility, which I solved by creating deprecated wrapper methods.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p><strong>Contact</strong></p>
+        <p>Email: <a href="mailto:anthony.mccormack@snhu.edu">anthony.mccormack@snhu.edu</a></p>
+        <p>GitHub: <a href="https://github.com/pshacker01">pshacker01</a></p>
+        <p>&copy; 2025 A. McCormack - CS 499 Capstone</p>
+    </footer>
+</body>
+</html>
