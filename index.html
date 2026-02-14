@@ -187,6 +187,114 @@
             text-align: center;
             border-top: 3px solid #e94560;
         }
+        /* ==================== DIFF VIEWER ==================== */
+        .diff-toggle-btn {
+            background: #16213e;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 8px;
+        }
+        .diff-toggle-btn:hover {
+            background: #e94560;
+        }
+        .diff-container {
+            display: none;
+            margin-top: 20px;
+            border: 2px solid #d1d5da;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+        .diff-header {
+            background: #f1f3f5;
+            padding: 10px 16px;
+            border-bottom: 1px solid #d1d5da;
+            font-size: 0.85rem;
+            color: #586069;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .diff-stats .diff-add-count { color: #22863a; font-weight: 700; }
+        .diff-stats .diff-del-count { color: #cb2431; font-weight: 700; }
+        .diff-col-headers {
+            display: flex;
+            border-bottom: 1px solid #d1d5da;
+            background: #f6f8fa;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .diff-col-headers > div {
+            flex: 1;
+            padding: 6px 12px;
+        }
+        .diff-col-headers > div:first-child {
+            color: #cb2431;
+            border-right: 2px solid #d1d5da;
+        }
+        .diff-col-headers > div:last-child {
+            color: #22863a;
+        }
+        .diff-scroll {
+            max-height: 600px;
+            overflow: auto;
+        }
+        .diff-table {
+            border-collapse: collapse;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 11.5px;
+            line-height: 1.5;
+            width: 100%;
+        }
+        .diff-table td {
+            padding: 0 8px;
+            vertical-align: top;
+        }
+        .diff-ln {
+            width: 45px;
+            min-width: 45px;
+            max-width: 45px;
+            text-align: right;
+            color: rgba(27,31,35,0.3);
+            user-select: none;
+            padding-right: 8px !important;
+            font-size: 11px;
+        }
+        .diff-code {
+            white-space: pre;
+        }
+        td.diff-oc {
+            border-right: 2px solid #d1d5da;
+        }
+        td.diff-oln {
+            border-right: 1px solid #eaecef;
+        }
+        td.diff-nln {
+            border-right: 1px solid #eaecef;
+        }
+        .diff-table tr.diff-remove td.diff-oln,
+        .diff-table tr.diff-remove td.diff-oc {
+            background: #ffeef0;
+        }
+        .diff-table tr.diff-remove td.diff-oln {
+            color: rgba(203,36,49,0.5);
+        }
+        .diff-table tr.diff-remove td.diff-nln,
+        .diff-table tr.diff-remove td.diff-nc {
+            background: #fafbfc;
+        }
+        .diff-table tr.diff-add td.diff-nln,
+        .diff-table tr.diff-add td.diff-nc {
+            background: #e6ffed;
+        }
+        .diff-table tr.diff-add td.diff-nln {
+            color: rgba(34,134,58,0.5);
+        }
+        .diff-table tr.diff-add td.diff-oln,
+        .diff-table tr.diff-add td.diff-oc {
+            background: #fafbfc;
+        }
     </style>
 </head>
 <body>
@@ -249,7 +357,9 @@
                 <h4>Thermostat.py - Embedded Systems Temperature Controller</h4>
                 <p>A Python-based environmental control system that interfaces with a Raspberry Pi to poll an AHTx0 temperature and humidity sensor, manages a three-state thermostat (off, heat, cool), and outputs real-time data to a 16x2 LCD display.</p>
                 <a href="Thermostat.py" class="btn">View Source Code</a>
+                <button id="btn-thermostat" class="btn diff-toggle-btn" onclick="toggleDiff('thermostat')">&#9660; View Code Changes</button>
             </div>
+            <div id="diff-thermostat" class="diff-container"></div>
 
             <h3>Enhancements Made:</h3>
             <ul>
@@ -276,7 +386,9 @@
                 <h4>DataGridActivity.java - Android Inventory Manager</h4>
                 <p>An Android mobile app that enables users to manage inventory items through CRUD operations with a SQLite database backend, enhanced with optimized data structures and sorting algorithms.</p>
                 <a href="DataGridActivity.java" class="btn">View Source Code</a>
+                <button id="btn-datagrid" class="btn diff-toggle-btn" onclick="toggleDiff('datagrid')">&#9660; View Code Changes</button>
             </div>
+            <div id="diff-datagrid" class="diff-container"></div>
 
             <h3>Enhancements Made:</h3>
             <ul>
@@ -303,7 +415,9 @@
                 <h4>DatabaseHelper.java - Secure SQLite Database Manager</h4>
                 <p>This artifact demonstrates my skills in database design and security implementation for an Android inventory management application I originally developed in CS 360.</p>
                 <a href="DatabaseHelper.java" class="btn">View Source Code</a>
+                <button id="btn-database" class="btn diff-toggle-btn" onclick="toggleDiff('database')">&#9660; View Code Changes</button>
             </div>
+            <div id="diff-database" class="diff-container"></div>
 
             <h3>Enhancements Made:</h3>
             <ul>
@@ -443,5 +557,2499 @@
         <p>GitHub: <a href="https://github.com/pshacker01">pshacker01</a></p>
         <p>&copy; 2025 A. McCormack - CS 499 Capstone</p>
     </footer>
+<script type="text/plain" id="code-thermostat-old">
+#
+# Thermostat - This is the Python code used to demonstrate
+# the functionality of the thermostat that we have prototyped throughout
+# the course.
+#
+# This code works with the test circuit that was built for module 7.
+#
+# Functionality:
+#
+# The thermostat has three states: off, heat, cool
+#
+# The lights will represent the state that the thermostat is in.
+#
+# If the thermostat is set to off, the lights will both be off.
+#
+# If the thermostat is set to heat, the Red LED will be fading in
+# and out if the current temperature is blow the set temperature;
+# otherwise, the Red LED will be on solid.
+#
+# If the thermostat is set to cool, the Blue LED will be fading in
+# and out if the current temperature is above the set temperature;
+# otherwise, the Blue LED will be on solid.
+#
+# One button will cycle through the three states of the thermostat.
+#
+# One button will raise the setpoint by a degree.
+#
+# One button will lower the setpoint by a degree.
+#
+# The LCD display will display the date and time on one line and
+# alternate the second line between the current temperature and
+# the state of the thermostat along with its set temperature.
+#
+# The Thermostat will send a status update to the TemperatureServer
+# over the serial port every 30 seconds in a comma delimited string
+# including the state of the thermostat, the current temperature
+# in degrees Fahrenheit, and the setpoint of the thermostat.
+#
+#------------------------------------------------------------------
+# Change History
+#------------------------------------------------------------------
+# Version   |   Description
+#------------------------------------------------------------------
+#    1          Initial Development
+#------------------------------------------------------------------
+
+##
+## Import necessary to provide timing in the main loop
+##
+from time import sleep
+from datetime import datetime
+
+##
+## Imports required to allow us to build a fully functional state machine
+##
+from statemachine import StateMachine, State
+
+##
+## Imports necessary to provide connectivity to the
+## thermostat sensor and the I2C bus
+##
+import board
+import adafruit_ahtx0
+
+##
+## These are the packages that we need to pull in so that we can work
+## with the GPIO interface on the Raspberry Pi board and work with
+## the 16x2 LCD display
+##
+# import board - already imported for I2C connectivity
+import digitalio
+import adafruit_character_lcd.character_lcd as characterlcd
+
+## This imports the Python serial package to handle communications over the
+## Raspberry Pi's serial port.
+import serial
+
+##
+## Imports required to handle our Button, and our PWMLED devices
+##
+from gpiozero import Button, PWMLED
+
+##
+## This package is necessary so that we can delegate the blinking
+## lights to their own thread so that more work can be done at the
+## same time
+##
+from threading import Thread
+
+##
+## This is needed to get coherent matching of temperatures.
+##
+from math import floor
+
+##
+## DEBUG flag - boolean value to indicate whether or not to print
+## status messages on the console of the program
+##
+DEBUG = True
+
+##
+## Create an I2C instance so that we can communicate with
+## devices on the I2C bus.
+##
+i2c = board.I2C()
+
+##
+## Initialize our Temperature and Humidity sensor
+##
+thSensor = adafruit_ahtx0.AHTx0(i2c)
+
+##
+## Initialize our serial connection
+##
+## Because we imported the entire package instead of just importing Serial and
+## some of the other flags from the serial package, we need to reference those
+## objects with dot notation.
+##
+## e.g. ser = serial.Serial
+##
+ser = serial.Serial(
+        port='/dev/ttyS0', # This would be /dev/ttyAM0 prior to Raspberry Pi 3
+        baudrate = 115200, # This sets the speed of the serial interface in
+                           # bits/second
+        parity=serial.PARITY_NONE,      # Disable parity
+        stopbits=serial.STOPBITS_ONE,   # Serial protocol will use one stop bit
+        bytesize=serial.EIGHTBITS,      # We are using 8-bit bytes
+        timeout=1          # Configure a 1-second timeout
+)
+
+##
+## Our two LEDs, utilizing GPIO 18, and GPIO 23
+##
+redLight = PWMLED(18)
+blueLight = PWMLED(23)
+
+
+##
+## ManagedDisplay - Class intended to manage the 16x2
+## Display
+##
+## This code is largely taken from the work done in module 4, and
+## converted into a class so that we can more easily consume the
+## operational capabilities.
+##
+class ManagedDisplay():
+    ##
+    ## Class Initialization method to setup the display
+    ##
+    def __init__(self):
+        ##
+        ## Setup the six GPIO lines to communicate with the display.
+        ## This leverages the digitalio class to handle digital
+        ## outputs on the GPIO lines. There is also an analagous
+        ## class for analog IO.
+        ##
+        ## You need to make sure that the port mappings match the
+        ## physical wiring of the display interface to the
+        ## GPIO interface.
+        ##
+        ## compatible with all versions of RPI as of Jan. 2019
+        ##
+        self.lcd_rs = digitalio.DigitalInOut(board.D17)
+        self.lcd_en = digitalio.DigitalInOut(board.D27)
+        self.lcd_d4 = digitalio.DigitalInOut(board.D5)
+        self.lcd_d5 = digitalio.DigitalInOut(board.D6)
+        self.lcd_d6 = digitalio.DigitalInOut(board.D13)
+        self.lcd_d7 = digitalio.DigitalInOut(board.D26)
+
+        # Modify this if you have a different sized character LCD
+        self.lcd_columns = 16
+        self.lcd_rows = 2
+
+        # Initialise the lcd class
+        self.lcd = characterlcd.Character_LCD_Mono(self.lcd_rs, self.lcd_en,
+                    self.lcd_d4, self.lcd_d5, self.lcd_d6, self.lcd_d7,
+                    self.lcd_columns, self.lcd_rows)
+
+        # wipe LCD screen before we start
+        self.lcd.clear()
+
+    ##
+    ## cleanupDisplay - Method used to cleanup the digitalIO lines that
+    ## are used to run the display.
+    ##
+    def cleanupDisplay(self):
+        # Clear the LCD first - otherwise we won't be abe to update it.
+        self.lcd.clear()
+        self.lcd_rs.deinit()
+        self.lcd_en.deinit()
+        self.lcd_d4.deinit()
+        self.lcd_d5.deinit()
+        self.lcd_d6.deinit()
+        self.lcd_d7.deinit()
+
+    ##
+    ## clear - Convenience method used to clear the display
+    ##
+    def clear(self):
+        self.lcd.clear()
+
+    ##
+    ## updateScreen - Convenience method used to update the message.
+    ##
+    def updateScreen(self, message):
+        self.lcd.clear()
+        self.lcd.message = message
+
+    ## End class ManagedDisplay definition
+
+##
+## Initialize our display
+##
+screen = ManagedDisplay()
+
+##
+## TemperatureMachine - This is our StateMachine implementation class.
+## The purpose of this state machine is to manage the three states
+## handled by our thermostat:
+##
+##  off
+##  heat
+##  cool
+##
+##
+class TemperatureMachine(StateMachine):
+    "A state machine designed to manage our thermostat"
+
+    ##
+    ## Define the three states for our machine.
+    ##
+    ##  off - nothing lit up
+    ##  red - only red LED fading in and out
+    ##  blue - only blue LED fading in and out
+    ##
+    off = State(initial = True)
+    heat = State()
+    cool = State()
+
+    ##
+    ## Default temperature setPoint is 72 degrees Fahrenheit
+    ##
+    setPoint = 72
+
+    ##
+    ## cycle - event that provides the state machine behavior
+    ## of transitioning between the three states of our
+    ## thermostat
+    ##
+    cycle = (
+        off.to(heat) |
+        heat.to(cool) |
+        cool.to(off)
+    )
+
+    ##
+    ## on_enter_heat - Action performed when the state machine transitions
+    ## into the 'heat' state
+    ##
+    def on_enter_heat(self):
+        # refresh LEDs based on current temp vs. setPoint
+        self.updateLights()
+
+        if DEBUG:
+            print("* Changing state to heat")
+
+    ##
+    ## on_exit_heat - Action performed when the statemachine transitions
+    ## out of the 'heat' state.
+    ##
+    def on_exit_heat(self):
+        # refresh LEDs when exiting the heat state
+        self.updateLights()
+
+    ##
+    ## on_enter_cool - Action performed when the state machine transitions
+    ## into the 'cool' state
+    ##
+    def on_enter_cool(self):
+        # refresh LEDs based on current temp vs. setPoint
+        self.updateLights()
+
+        if DEBUG:
+            print("* Changing state to cool")
+
+    ##
+    ## on_exit_cool - Action performed when the statemachine transitions
+    ## out of the 'cool' state.
+    ##
+    def on_exit_cool(self):
+        # refresh LEDs when exiting the cool state
+        self.updateLights()
+
+    ##
+    ## on_enter_off - Action performed when the state machine transitions
+    ## into the 'off' state
+    ##
+    def on_enter_off(self):
+        # turn both LEDs off when entering the off state
+        redLight.off()
+        blueLight.off()
+
+        if DEBUG:
+            print("* Changing state to off")
+
+    ##
+    ## processTempStateButton - Utility method used to send events to the
+    ## state machine. This is triggered by the button_pressed event
+    ## handler for our first button
+    ##
+    def processTempStateButton(self):
+        if DEBUG:
+            print("Cycling Temperature State")
+        # cycle through off → heat → cool
+        self.cycle()
+
+    ##
+    ## processTempIncButton - Utility method used to update the
+    ## setPoint for the temperature. This will increase the setPoint
+    ## by a single degree. This is triggered by the button_pressed event
+    ## handler for our second button
+    ##
+    def processTempIncButton(self):
+        if DEBUG:
+            print("Increasing Set Point")
+        # raise the setPoint by one degree
+        self.setPoint += 1
+        # update the LEDs to reflect the new set point
+        self.updateLights()
+
+    ##
+    ## processTempDecButton - Utility method used to update the
+    ## setPoint for the temperature. This will decrease the setPoint
+    ## by a single degree. This is triggered by the button_pressed event
+    ## handler for our third button
+    ##
+    def processTempDecButton(self):
+        if DEBUG:
+            print("Decreasing Set Point")
+        # lower the setPoint by one degree
+        self.setPoint -= 1
+        # refresh LEDs to reflect the new set point
+        self.updateLights()
+
+    ##
+    ## updateLights - Utility method to update the LED indicators on the
+    ## Thermostat
+    ##
+    def updateLights(self):
+        # Make sure we are comparing temperatures in Fahrenheit
+        temp = floor(self.getFahrenheit())
+        redLight.off()
+        blueLight.off()
+
+        # Verify values for debug purposes
+        if DEBUG:
+            print(f"State: {self.current_state.id}")
+            print(f"SetPoint: {self.setPoint}")
+            print(f"Temp: {temp}")
+
+        # Determine visual identifiers based on state and temperature
+        state = self.current_state.id
+
+        if state == "heat":
+            # Heating: fade red if below setPoint, solid red otherwise
+            if temp < self.setPoint:
+                redLight.pulse()
+            else:
+                redLight.value = 1
+
+        elif state == "cool":
+            # Cooling: fade blue if above setPoint, solid blue otherwise
+            if temp > self.setPoint:
+                blueLight.pulse()
+            else:
+                blueLight.value = 1
+
+    ##
+    ## run - kickoff the display management functionality of the thermostat
+    ##
+    def run(self):
+        myThread = Thread(target=self.manageMyDisplay)
+        myThread.start()
+
+    ##
+    ## Get the temperature in Fahrenheit
+    ##
+    def getFahrenheit(self):
+        t = thSensor.temperature
+        return (((9/5) * t) + 32)
+
+    ##
+    ##  Configure output string for the Thermostat Server
+    ##
+    def setupSerialOutput(self):
+        # build a comma-delimited status string: state,tempF,setPointF
+        output = f"{self.current_state.id},{self.getFahrenheit():0.1f},{self.setPoint}"
+        return output
+
+    ## Continue display output
+    endDisplay = False
+
+    ##
+    ##  This function is designed to manage the LCD Display
+    ##
+    def manageMyDisplay(self):
+        counter = 1
+        altCounter = 1
+        while not self.endDisplay:
+            if DEBUG:
+                print("Processing Display Info...")
+
+            # Grab the current time
+            current_time = datetime.now()
+
+            # Setup display line 1
+            lcd_line_1 = current_time.strftime("%b %d %H:%M:%S\n")
+
+            # Setup display line 2
+            if altCounter < 6:
+                temp = floor(self.getFahrenheit())
+                lcd_line_2 = f"T:{temp}F"
+                altCounter += 1
+            else:
+                lcd_line_2 = f"{self.current_state.id.upper()} {self.setPoint}F"
+                altCounter += 1
+                if altCounter >= 11:
+                    # Run the routine to update the lights every 10 seconds
+                    self.updateLights()
+                    altCounter = 1
+
+            # Update the LCD
+            screen.updateScreen(lcd_line_1 + lcd_line_2)
+
+            # Update server every 30 seconds
+            if DEBUG:
+                print(f"Counter: {counter}")
+            if (counter % 30) == 0:
+                ser.write((self.setupSerialOutput() + "\n").encode())
+                counter = 1
+            else:
+                counter += 1
+
+            sleep(1)
+
+        # Cleanup display when done
+        screen.cleanupDisplay()
+
+    ## End class TemperatureMachine definition
+
+
+##
+## Setup our State Machine
+##
+tsm = TemperatureMachine()
+tsm.run()
+
+
+## Configure our green button to use GPIO 24 and to execute
+## the method to cycle the thermostat when pressed.
+greenButton = Button(24)
+greenButton.when_pressed = tsm.processTempStateButton
+
+## Configure our Red button to use GPIO 25 and to execute
+## the function to increase the setpoint by a degree.
+redButton = Button(25)
+redButton.when_pressed = tsm.processTempIncButton
+
+## Configure our Blue button to use GPIO 12 and to execute
+## the function to decrease the setpoint by a degree.
+blueButton = Button(12)
+blueButton.when_pressed = tsm.processTempDecButton
+
+
+##
+## Repeat until the user creates a keyboard interrupt (CTRL-C)
+##
+while repeat:
+    try:
+        ## wait
+        sleep(30)
+
+    except KeyboardInterrupt:
+        ## Catch the keyboard interrupt (CTRL-C) and exit cleanly
+        ## we do not need to manually clean up the GPIO pins, the
+        ## gpiozero library handles that process.
+        print("Cleaning up. Exiting...")
+
+        ## Stop the loop
+        repeat = False
+
+        ## Close down the display
+        tsm.endDisplay = True
+        sleep(1)
+</script>
+
+<script type="text/plain" id="code-thermostat-new">
+"""
+Thermostat - Professional IoT Climate Control System
+
+This is a production-ready Python implementation of a thermostat system
+that demonstrates the Observer Pattern for IoT device management.
+
+The system monitors temperature and humidity, manages heating/cooling states,
+and provides real-time visual feedback through LEDs and an LCD display.
+
+Functionality:
+    - Three operational states: OFF, HEAT, COOL
+    - Visual LED indicators with pulsing effects when actively heating/cooling
+    - Real-time LCD display with temperature and state information
+    - Button controls for state cycling and setpoint adjustment
+    - Serial communication for remote monitoring
+    - Observer Pattern for decoupled component updates
+
+Hardware Components:
+    - AHTx0 Temperature/Humidity Sensor (I2C)
+    - 16x2 Character LCD Display
+    - Red and Blue PWM LEDs
+    - Three push buttons (state cycle, increment, decrement)
+    - Serial UART connection for server updates
+
+Change History:
+---------------------------------------------------------------------------
+Version | Date       | Author           | Description
+---------------------------------------------------------------------------
+1.0     | [Original] | Original Author  | Initial procedural development
+2.0     | 2026-01-24 | Refactoring Team | Observer Pattern refactoring
+        |            |                  | - Implemented Subject/Observer
+        |            |                  | - Decoupled GPIO configuration
+        |            |                  | - Added defensive error handling
+        |            |                  | - Enhanced thread safety
+        |            |                  | - PEP 8 compliance
+---------------------------------------------------------------------------
+"""
+
+import logging
+from abc import ABC, abstractmethod
+from datetime import datetime
+from math import floor
+from threading import Thread, Lock
+from time import sleep
+from typing import List, Dict, Optional, Any
+
+import board
+import digitalio
+import serial
+import adafruit_ahtx0
+import adafruit_character_lcd.character_lcd as characterlcd
+from gpiozero import Button, PWMLED
+from statemachine import StateMachine, State
+
+
+# =============================================================================
+# CONFIGURATION
+# =============================================================================
+
+# Hardware Configuration Dictionary
+HARDWARE_CONFIG: Dict[str, Any] = {
+    # LCD Display GPIO Pins
+    'lcd_pins': {
+        'rs': 'D17',
+        'en': 'D27',
+        'd4': 'D5',
+        'd5': 'D6',
+        'd6': 'D13',
+        'd7': 'D26',
+    },
+    # LED GPIO Pins
+    'led_pins': {
+        'red': 18,
+        'blue': 23,
+    },
+    # Button GPIO Pins
+    'button_pins': {
+        'state_cycle': 24,
+        'increment': 25,
+        'decrement': 12,
+    },
+    # Serial Configuration
+    'serial': {
+        'port': '/dev/ttyS0',
+        'baudrate': 115200,
+        'timeout': 1,
+    },
+    # LCD Display Configuration
+    'lcd_display': {
+        'columns': 16,
+        'rows': 2,
+    },
+    # Operational Parameters
+    'timing': {
+        'display_update_interval': 1,  # seconds
+        'server_update_interval': 30,  # seconds
+        'main_loop_sleep': 30,  # seconds
+    },
+}
+
+# Application Configuration
+DEFAULT_SETPOINT: int = 72  # degrees Fahrenheit
+DEBUG: bool = True
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO if DEBUG else logging.WARNING,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+# =============================================================================
+# OBSERVER PATTERN IMPLEMENTATION
+# =============================================================================
+
+class Observer(ABC):
+    """
+    Abstract base class defining the Observer interface.
+
+    All concrete observers must implement the update() method to respond
+    to notifications from Subject instances.
+    """
+
+    @abstractmethod
+    def update(self, subject: 'Subject') -> None:
+        """
+        Receive update notification from subject.
+
+        Args:
+            subject: The subject that triggered the update
+        """
+        pass
+
+
+class Subject:
+    """
+    Base class for objects that can be observed.
+
+    Maintains a list of observers and notifies them of state changes.
+    Thread-safe implementation using locks for observer list management.
+    """
+
+    def __init__(self) -> None:
+        """Initialize the subject with an empty observer list."""
+        self._observers: List[Observer] = []
+        self._lock: Lock = Lock()
+
+    def attach(self, observer: Observer) -> None:
+        """
+        Attach an observer to this subject.
+
+        Args:
+            observer: The observer to attach
+        """
+        with self._lock:
+            if observer not in self._observers:
+                self._observers.append(observer)
+                logger.info(f"Attached observer: {observer.__class__.__name__}")
+
+    def detach(self, observer: Observer) -> None:
+        """
+        Detach an observer from this subject.
+
+        Args:
+            observer: The observer to detach
+        """
+        with self._lock:
+            if observer in self._observers:
+                self._observers.remove(observer)
+                logger.info(f"Detached observer: {observer.__class__.__name__}")
+
+    def notify(self) -> None:
+        """Notify all attached observers of a state change."""
+        with self._lock:
+            observers_copy = self._observers.copy()
+
+        for observer in observers_copy:
+            try:
+                observer.update(self)
+            except Exception as e:
+                logger.error(
+                    f"Error notifying observer {observer.__class__.__name__}: {e}",
+                    exc_info=True
+                )
+
+
+# =============================================================================
+# CLIMATE SENSOR (SUBJECT)
+# =============================================================================
+
+class ClimateSensor(Subject):
+    """
+    Climate sensor that monitors temperature and humidity.
+
+    Acts as a Subject in the Observer Pattern, notifying observers
+    when sensor readings are updated. Implements defensive error handling
+    for I2C communication failures.
+    """
+
+    def __init__(self, i2c_bus: board.I2C) -> None:
+        """
+        Initialize the climate sensor.
+
+        Args:
+            i2c_bus: I2C bus instance for sensor communication
+        """
+        super().__init__()
+        self._sensor: Optional[adafruit_ahtx0.AHTx0] = None
+        self._temperature_c: float = 0.0
+        self._humidity: float = 0.0
+        self._last_read_successful: bool = False
+        self._lock: Lock = Lock()
+
+        try:
+            self._sensor = adafruit_ahtx0.AHTx0(i2c_bus)
+            logger.info("Climate sensor initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize climate sensor: {e}", exc_info=True)
+
+    def read_sensor(self) -> bool:
+        """
+        Read current temperature and humidity from the sensor.
+
+        Returns:
+            bool: True if read was successful, False otherwise
+        """
+        if self._sensor is None:
+            logger.warning("Sensor not initialized, cannot read")
+            return False
+
+        try:
+            with self._lock:
+                self._temperature_c = self._sensor.temperature
+                self._humidity = self._sensor.humidity
+                self._last_read_successful = True
+
+            logger.debug(
+                f"Sensor read successful: {self._temperature_c:.1f}°C, "
+                f"{self._humidity:.1f}%"
+            )
+            self.notify()
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to read from climate sensor: {e}", exc_info=True)
+            with self._lock:
+                self._last_read_successful = False
+            return False
+
+    @property
+    def temperature_fahrenheit(self) -> float:
+        """
+        Get temperature in Fahrenheit.
+
+        Returns:
+            float: Temperature in degrees Fahrenheit
+        """
+        with self._lock:
+            return (self._temperature_c * 9.0 / 5.0) + 32.0
+
+    @property
+    def temperature_celsius(self) -> float:
+        """
+        Get temperature in Celsius.
+
+        Returns:
+            float: Temperature in degrees Celsius
+        """
+        with self._lock:
+            return self._temperature_c
+
+    @property
+    def humidity(self) -> float:
+        """
+        Get relative humidity.
+
+        Returns:
+            float: Relative humidity percentage
+        """
+        with self._lock:
+            return self._humidity
+
+    @property
+    def is_healthy(self) -> bool:
+        """
+        Check if sensor is functioning properly.
+
+        Returns:
+            bool: True if last read was successful
+        """
+        with self._lock:
+            return self._last_read_successful
+
+
+# =============================================================================
+# THERMOSTAT STATE MACHINE
+# =============================================================================
+
+class ThermostatStateMachine(StateMachine):
+    """
+    State machine for managing thermostat operational states.
+
+    States:
+        - OFF: No heating or cooling
+        - HEAT: Heating mode active
+        - COOL: Cooling mode active
+
+    The state machine acts as a Subject, notifying observers when
+    state transitions occur or setpoint changes.
+    """
+
+    # Define states
+    off = State(initial=True)
+    heat = State()
+    cool = State()
+
+    # Define state transitions
+    cycle = (
+        off.to(heat) |
+        heat.to(cool) |
+        cool.to(off)
+    )
+
+    def __init__(self, climate_sensor: ClimateSensor,
+                 initial_setpoint: int = DEFAULT_SETPOINT) -> None:
+        """
+        Initialize the thermostat state machine.
+
+        Args:
+            climate_sensor: Climate sensor for temperature readings
+            initial_setpoint: Initial temperature setpoint in Fahrenheit
+        """
+        super().__init__()
+        self._climate_sensor: ClimateSensor = climate_sensor
+        self._setpoint: int = initial_setpoint
+        self._lock: Lock = Lock()
+        self._observers: List[Observer] = []
+
+        logger.info(f"Thermostat initialized with setpoint: {self._setpoint}°F")
+
+    @property
+    def setpoint(self) -> int:
+        """Get current temperature setpoint."""
+        with self._lock:
+            return self._setpoint
+
+    @setpoint.setter
+    def setpoint(self, value: int) -> None:
+        """
+        Set temperature setpoint and notify observers.
+
+        Args:
+            value: New setpoint in degrees Fahrenheit
+        """
+        with self._lock:
+            self._setpoint = value
+        logger.info(f"Setpoint changed to: {self._setpoint}°F")
+        self._notify_observers()
+
+    @property
+    def climate_sensor(self) -> ClimateSensor:
+        """Get the associated climate sensor."""
+        return self._climate_sensor
+
+    @property
+    def current_temperature(self) -> float:
+        """Get current temperature in Fahrenheit."""
+        return self._climate_sensor.temperature_fahrenheit
+
+    def attach_observer(self, observer: Observer) -> None:
+        """
+        Attach an observer to receive state change notifications.
+
+        Args:
+            observer: Observer to attach
+        """
+        if observer not in self._observers:
+            self._observers.append(observer)
+            logger.info(f"Attached observer to thermostat: {observer.__class__.__name__}")
+
+    def _notify_observers(self) -> None:
+        """Notify all attached observers of state changes."""
+        for observer in self._observers:
+            try:
+                observer.update(self)
+            except Exception as e:
+                logger.error(
+                    f"Error notifying observer {observer.__class__.__name__}: {e}",
+                    exc_info=True
+                )
+
+    def increment_setpoint(self) -> None:
+        """Increase setpoint by one degree."""
+        self.setpoint = self._setpoint + 1
+
+    def decrement_setpoint(self) -> None:
+        """Decrease setpoint by one degree."""
+        self.setpoint = self._setpoint - 1
+
+    def cycle_state(self) -> None:
+        """Cycle through thermostat states."""
+        logger.info(f"Cycling state from: {self.current_state.id}")
+        self.cycle()
+
+    # State transition handlers
+    def on_enter_heat(self) -> None:
+        """Handler for entering HEAT state."""
+        logger.info("Entering HEAT mode")
+        self._notify_observers()
+
+    def on_exit_heat(self) -> None:
+        """Handler for exiting HEAT state."""
+        logger.debug("Exiting HEAT mode")
+        self._notify_observers()
+
+    def on_enter_cool(self) -> None:
+        """Handler for entering COOL state."""
+        logger.info("Entering COOL mode")
+        self._notify_observers()
+
+    def on_exit_cool(self) -> None:
+        """Handler for exiting COOL state."""
+        logger.debug("Exiting COOL mode")
+        self._notify_observers()
+
+    def on_enter_off(self) -> None:
+        """Handler for entering OFF state."""
+        logger.info("Entering OFF mode")
+        self._notify_observers()
+
+
+# =============================================================================
+# LED CONTROLLER OBSERVER
+# =============================================================================
+
+class LEDController(Observer):
+    """
+    Observer that controls LED indicators based on thermostat state.
+
+    Controls red and blue PWM LEDs to provide visual feedback:
+        - OFF state: Both LEDs off
+        - HEAT state: Red LED pulsing (if temp < setpoint) or solid
+        - COOL state: Blue LED pulsing (if temp > setpoint) or solid
+    """
+
+    def __init__(self, config: Dict[str, int]) -> None:
+        """
+        Initialize LED controller.
+
+        Args:
+            config: Dictionary containing 'red' and 'blue' GPIO pin numbers
+        """
+        self._red_led: Optional[PWMLED] = None
+        self._blue_led: Optional[PWMLED] = None
+        self._lock: Lock = Lock()
+
+        try:
+            self._red_led = PWMLED(config['red'])
+            self._blue_led = PWMLED(config['blue'])
+            logger.info(
+                f"LED Controller initialized - Red: GPIO{config['red']}, "
+                f"Blue: GPIO{config['blue']}"
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize LED controller: {e}", exc_info=True)
+
+    def update(self, subject: Any) -> None:
+        """
+        Update LED display based on thermostat state.
+
+        Args:
+            subject: ThermostatStateMachine instance
+        """
+        if not isinstance(subject, ThermostatStateMachine):
+            return
+
+        if self._red_led is None or self._blue_led is None:
+            logger.warning("LEDs not initialized, cannot update")
+            return
+
+        try:
+            with self._lock:
+                self._update_leds(subject)
+        except Exception as e:
+            logger.error(f"Error updating LEDs: {e}", exc_info=True)
+
+    def _update_leds(self, thermostat: ThermostatStateMachine) -> None:
+        """
+        Internal method to update LED states.
+
+        Args:
+            thermostat: Thermostat state machine
+        """
+        current_temp = floor(thermostat.current_temperature)
+        setpoint = thermostat.setpoint
+        state = thermostat.current_state.id
+
+        # Turn off both LEDs first
+        self._red_led.off()
+        self._blue_led.off()
+
+        logger.debug(
+            f"Updating LEDs - State: {state}, Temp: {current_temp}°F, "
+            f"Setpoint: {setpoint}°F"
+        )
+
+        if state == "heat":
+            if current_temp < setpoint:
+                self._red_led.pulse()
+                logger.debug("Red LED pulsing (heating)")
+            else:
+                self._red_led.value = 1
+                logger.debug("Red LED solid (at temperature)")
+
+        elif state == "cool":
+            if current_temp > setpoint:
+                self._blue_led.pulse()
+                logger.debug("Blue LED pulsing (cooling)")
+            else:
+                self._blue_led.value = 1
+                logger.debug("Blue LED solid (at temperature)")
+
+    def cleanup(self) -> None:
+        """Cleanup LED resources."""
+        try:
+            if self._red_led:
+                self._red_led.off()
+                self._red_led.close()
+            if self._blue_led:
+                self._blue_led.off()
+                self._blue_led.close()
+            logger.info("LED controller cleanup complete")
+        except Exception as e:
+            logger.error(f"Error during LED cleanup: {e}", exc_info=True)
+
+
+# =============================================================================
+# LCD DISPLAY OBSERVER
+# =============================================================================
+
+class LCDDisplay(Observer):
+    """
+    Observer that manages the 16x2 LCD display.
+
+    Runs in a separate thread to continuously update the display with:
+        - Line 1: Current date and time
+        - Line 2: Alternates between current temperature and thermostat state/setpoint
+
+    Also handles periodic serial communication for remote monitoring.
+    """
+
+    def __init__(self, config: Dict[str, Any], serial_conn: Optional[serial.Serial]) -> None:
+        """
+        Initialize LCD display controller.
+
+        Args:
+            config: Hardware configuration dictionary
+            serial_conn: Serial connection for server updates (optional)
+        """
+        self._lcd: Optional[characterlcd.Character_LCD_Mono] = None
+        self._serial: Optional[serial.Serial] = serial_conn
+        self._running: bool = False
+        self._thread: Optional[Thread] = None
+        self._thermostat: Optional[ThermostatStateMachine] = None
+        self._lock: Lock = Lock()
+
+        # Display configuration
+        self._columns: int = config['lcd_display']['columns']
+        self._rows: int = config['lcd_display']['rows']
+
+        # Initialize LCD hardware
+        try:
+            pins = config['lcd_pins']
+            lcd_rs = digitalio.DigitalInOut(getattr(board, pins['rs']))
+            lcd_en = digitalio.DigitalInOut(getattr(board, pins['en']))
+            lcd_d4 = digitalio.DigitalInOut(getattr(board, pins['d4']))
+            lcd_d5 = digitalio.DigitalInOut(getattr(board, pins['d5']))
+            lcd_d6 = digitalio.DigitalInOut(getattr(board, pins['d6']))
+            lcd_d7 = digitalio.DigitalInOut(getattr(board, pins['d7']))
+
+            self._lcd = characterlcd.Character_LCD_Mono(
+                lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7,
+                self._columns, self._rows
+            )
+            self._lcd.clear()
+
+            # Store pin references for cleanup
+            self._pins = {
+                'rs': lcd_rs, 'en': lcd_en, 'd4': lcd_d4,
+                'd5': lcd_d5, 'd6': lcd_d6, 'd7': lcd_d7
+            }
+
+            logger.info("LCD Display initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize LCD display: {e}", exc_info=True)
+
+    def update(self, subject: Any) -> None:
+        """
+        Receive update notifications.
+
+        Args:
+            subject: ThermostatStateMachine instance
+        """
+        if isinstance(subject, ThermostatStateMachine):
+            with self._lock:
+                self._thermostat = subject
+
+    def start(self, thermostat: ThermostatStateMachine) -> None:
+        """
+        Start the display update thread.
+
+        Args:
+            thermostat: Thermostat state machine to monitor
+        """
+        with self._lock:
+            self._thermostat = thermostat
+            self._running = True
+
+        self._thread = Thread(target=self._display_loop, daemon=True)
+        self._thread.start()
+        logger.info("LCD display thread started")
+
+    def stop(self) -> None:
+        """Stop the display update thread."""
+        self._running = False
+        if self._thread:
+            self._thread.join(timeout=2)
+        logger.info("LCD display thread stopped")
+
+    def _display_loop(self) -> None:
+        """Main display update loop running in separate thread."""
+        counter = 1
+        alt_counter = 1
+
+        while self._running:
+            try:
+                self._update_display(alt_counter)
+
+                # Handle serial updates
+                if (counter % HARDWARE_CONFIG['timing']['server_update_interval']) == 0:
+                    self._send_serial_update()
+                    counter = 1
+                else:
+                    counter += 1
+
+                # Update alt_counter for display alternation
+                alt_counter += 1
+                if alt_counter > 10:
+                    alt_counter = 1
+
+                sleep(HARDWARE_CONFIG['timing']['display_update_interval'])
+
+            except Exception as e:
+                logger.error(f"Error in display loop: {e}", exc_info=True)
+                sleep(1)
+
+    def _update_display(self, alt_counter: int) -> None:
+        """
+        Update the LCD display content.
+
+        Args:
+            alt_counter: Counter for alternating display content
+        """
+        if self._lcd is None or self._thermostat is None:
+            return
+
+        try:
+            # Line 1: Current date and time
+            current_time = datetime.now()
+            line1 = current_time.strftime("%b %d %H:%M:%S\n")
+
+            # Line 2: Alternate between temperature and state
+            if alt_counter < 6:
+                temp = floor(self._thermostat.current_temperature)
+                line2 = f"T:{temp}F"
+            else:
+                state = self._thermostat.current_state.id.upper()
+                setpoint = self._thermostat.setpoint
+                line2 = f"{state} {setpoint}F"
+
+            # Update display
+            self._lcd.clear()
+            self._lcd.message = line1 + line2
+
+            logger.debug(f"Display updated: {line1.strip()} | {line2}")
+
+        except Exception as e:
+            logger.error(f"Error updating LCD display: {e}", exc_info=True)
+
+    def _send_serial_update(self) -> None:
+        """Send status update over serial connection."""
+        if self._serial is None or self._thermostat is None:
+            return
+
+        try:
+            state = self._thermostat.current_state.id
+            temp = self._thermostat.current_temperature
+            setpoint = self._thermostat.setpoint
+
+            message = f"{state},{temp:.1f},{setpoint}\n"
+            self._serial.write(message.encode())
+
+            logger.debug(f"Serial update sent: {message.strip()}")
+
+        except Exception as e:
+            logger.error(f"Failed to send serial update: {e}", exc_info=True)
+
+    def cleanup(self) -> None:
+        """Cleanup display resources."""
+        self.stop()
+
+        try:
+            if self._lcd:
+                self._lcd.clear()
+
+            # Cleanup digital IO pins
+            for pin_name, pin in self._pins.items():
+                try:
+                    pin.deinit()
+                except Exception as e:
+                    logger.warning(f"Error deinitializing pin {pin_name}: {e}")
+
+            logger.info("LCD display cleanup complete")
+
+        except Exception as e:
+            logger.error(f"Error during LCD cleanup: {e}", exc_info=True)
+
+
+# =============================================================================
+# MAIN APPLICATION
+# =============================================================================
+
+class ThermostatApplication:
+    """
+    Main application class orchestrating the thermostat system.
+
+    Initializes all hardware components, sets up the Observer Pattern
+    relationships, and manages the application lifecycle.
+    """
+
+    def __init__(self, config: Dict[str, Any]) -> None:
+        """
+        Initialize the thermostat application.
+
+        Args:
+            config: Hardware configuration dictionary
+        """
+        self.config = config
+        self._running: bool = False
+
+        # Initialize hardware components
+        self._init_hardware()
+
+        # Create core system components
+        self._climate_sensor = ClimateSensor(self._i2c)
+        self._thermostat = ThermostatStateMachine(
+            self._climate_sensor,
+            DEFAULT_SETPOINT
+        )
+
+        # Create observers
+        self._led_controller = LEDController(config['led_pins'])
+        self._lcd_display = LCDDisplay(config, self._serial)
+
+        # Attach observers
+        self._thermostat.attach_observer(self._led_controller)
+        self._thermostat.attach_observer(self._lcd_display)
+
+        # Setup buttons
+        self._setup_buttons()
+
+        logger.info("Thermostat application initialized successfully")
+
+    def _init_hardware(self) -> None:
+        """Initialize hardware interfaces."""
+        try:
+            # Initialize I2C bus
+            self._i2c = board.I2C()
+            logger.info("I2C bus initialized")
+
+            # Initialize serial connection
+            serial_config = self.config['serial']
+            self._serial = serial.Serial(
+                port=serial_config['port'],
+                baudrate=serial_config['baudrate'],
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                bytesize=serial.EIGHTBITS,
+                timeout=serial_config['timeout']
+            )
+            logger.info(f"Serial port initialized: {serial_config['port']}")
+
+        except Exception as e:
+            logger.error(f"Hardware initialization error: {e}", exc_info=True)
+            self._serial = None
+
+    def _setup_buttons(self) -> None:
+        """Configure button event handlers."""
+        try:
+            button_config = self.config['button_pins']
+
+            # State cycle button
+            self._state_button = Button(button_config['state_cycle'])
+            self._state_button.when_pressed = self._thermostat.cycle_state
+
+            # Increment setpoint button
+            self._inc_button = Button(button_config['increment'])
+            self._inc_button.when_pressed = self._thermostat.increment_setpoint
+
+            # Decrement setpoint button
+            self._dec_button = Button(button_config['decrement'])
+            self._dec_button.when_pressed = self._thermostat.decrement_setpoint
+
+            logger.info("Button controls configured")
+
+        except Exception as e:
+            logger.error(f"Button setup error: {e}", exc_info=True)
+
+    def run(self) -> None:
+        """Start the thermostat application."""
+        self._running = True
+
+        # Start LCD display thread
+        self._lcd_display.start(self._thermostat)
+
+        # Initial sensor read and LED update
+        self._climate_sensor.read_sensor()
+        self._led_controller.update(self._thermostat)
+
+        logger.info("Thermostat application running")
+        logger.info(f"Initial setpoint: {self._thermostat.setpoint}°F")
+
+        try:
+            while self._running:
+                # Periodic sensor reading
+                self._climate_sensor.read_sensor()
+
+                # Update LED display based on current conditions
+                self._led_controller.update(self._thermostat)
+
+                sleep(self.config['timing']['main_loop_sleep'])
+
+        except KeyboardInterrupt:
+            logger.info("Keyboard interrupt received")
+            self.shutdown()
+
+    def shutdown(self) -> None:
+        """Gracefully shutdown the application."""
+        logger.info("Shutting down thermostat application...")
+        self._running = False
+
+        # Cleanup observers
+        self._lcd_display.cleanup()
+        self._led_controller.cleanup()
+
+        # Close serial connection
+        if self._serial and self._serial.is_open:
+            try:
+                self._serial.close()
+                logger.info("Serial connection closed")
+            except Exception as e:
+                logger.error(f"Error closing serial connection: {e}")
+
+        logger.info("Shutdown complete")
+
+
+# =============================================================================
+# ENTRY POINT
+# =============================================================================
+
+def main() -> None:
+    """Application entry point."""
+    logger.info("=" * 70)
+    logger.info("THERMOSTAT SYSTEM - Production Version 2.0")
+    logger.info("=" * 70)
+
+    try:
+        app = ThermostatApplication(HARDWARE_CONFIG)
+        app.run()
+    except Exception as e:
+        logger.critical(f"Fatal error: {e}", exc_info=True)
+        return 1
+
+    return 0
+
+
+if __name__ == "__main__":
+    exit(main())
+</script>
+
+<script type="text/plain" id="code-datagrid-old">
+package com.example.cs360project2_mccormack;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+public class DataGridActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private DataAdapter adapter;
+    private ArrayList<DataItem> dataList;
+    private DatabaseHelper dbHelper;
+
+    private EditText editTitle, editDescription;
+    private Button buttonAdd;
+    private static final int SMS_PERMISSION_CODE = 100;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_data_grid);
+
+        dbHelper = new DatabaseHelper(this);
+        dataList = dbHelper.getAllData();
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new DataAdapter(dataList, this::deleteItem);
+        recyclerView.setAdapter(adapter);
+
+        editTitle = findViewById(R.id.editTitle);
+        editDescription = findViewById(R.id.editDescription);
+        buttonAdd = findViewById(R.id.buttonAdd);
+
+        // Request SMS permission IMMEDIATELY after login
+        checkSmsPermission();
+
+        buttonAdd.setOnClickListener(v -> {
+            String title = editTitle.getText().toString().trim();
+            String description = editDescription.getText().toString().trim();
+
+            if (!title.isEmpty() && !description.isEmpty()) {
+                dbHelper.addData(title, description);
+                dataList.clear();
+                dataList.addAll(dbHelper.getAllData());
+                adapter.notifyDataSetChanged();
+
+                Toast.makeText(this, "Data added successfully!", Toast.LENGTH_SHORT).show();
+
+                // Send SMS notification only if permission is granted
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    sendSmsNotification();
+                }
+            } else {
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteItem(DataItem item) {
+        dbHelper.deleteData(item.getId());
+        dataList.clear();
+        dataList.addAll(dbHelper.getAllData());
+        adapter.notifyDataSetChanged();
+    }
+
+    private void checkSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    SMS_PERMISSION_CODE
+            );
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == SMS_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "SMS permission granted!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "SMS permission denied. Notifications disabled.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void sendSmsNotification() {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("1234567890", null, "Data added successfully!", null, null);
+            Toast.makeText(this, "Notification sent via SMS", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to send SMS: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+</script>
+
+<script type="text/plain" id="code-datagrid-new">
+package com.example.cs360project2_mccormack;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class DataGridActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private DataAdapter adapter;
+    private ArrayList<DataItem> dataList;
+    private HashMap<Integer, DataItem> dataMap; // O(1) lookup by ID
+    private DatabaseHelper dbHelper;
+
+    private EditText editTitle, editDescription;
+    private Button buttonAdd, buttonSort;
+    private static final int SMS_PERMISSION_CODE = 100;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_data_grid);
+
+        dbHelper = new DatabaseHelper(this);
+        dataList = dbHelper.getAllData();
+        dataMap = new HashMap<>();
+        buildHashMap(); // Initialize HashMap for O(1) lookups
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new DataAdapter(dataList, this::deleteItem);
+        recyclerView.setAdapter(adapter);
+
+        editTitle = findViewById(R.id.editTitle);
+        editDescription = findViewById(R.id.editDescription);
+        buttonAdd = findViewById(R.id.buttonAdd);
+        buttonSort = findViewById(R.id.buttonSort);
+
+        // Request SMS permission IMMEDIATELY after login
+        checkSmsPermission();
+
+        // Sort button click listener - uses MergeSort O(n log n)
+        buttonSort.setOnClickListener(v -> {
+            mergeSort(dataList, 0, dataList.size() - 1);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(this, "Items sorted by title (MergeSort)", Toast.LENGTH_SHORT).show();
+        });
+
+        buttonAdd.setOnClickListener(v -> {
+            String title = editTitle.getText().toString().trim();
+            String description = editDescription.getText().toString().trim();
+
+            if (!title.isEmpty() && !description.isEmpty()) {
+                dbHelper.addData(title, description);
+                refreshDataStructures(); // Sync both ArrayList and HashMap
+                adapter.notifyDataSetChanged();
+
+                Toast.makeText(this, "Data added successfully!", Toast.LENGTH_SHORT).show();
+
+                // Send SMS notification only if permission is granted
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    sendSmsNotification();
+                }
+            } else {
+                Toast.makeText(this, "Please enter all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteItem(DataItem item) {
+        dbHelper.deleteData(item.getId());
+        dataMap.remove(item.getId()); // O(1) removal from HashMap
+        refreshDataStructures(); // Sync both ArrayList and HashMap
+        adapter.notifyDataSetChanged();
+    }
+
+    private void checkSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    SMS_PERMISSION_CODE
+            );
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == SMS_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "SMS permission granted!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "SMS permission denied. Notifications disabled.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void sendSmsNotification() {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage("1234567890", null, "Data added successfully!", null, null);
+            Toast.makeText(this, "Notification sent via SMS", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed to send SMS: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // ==================== ALGORITHM ENHANCEMENTS ====================
+
+    /**
+     * Builds the HashMap from the ArrayList for O(1) lookups.
+     * Called during initialization and after data refresh.
+     * Time Complexity: O(n) - one-time cost for O(1) future lookups
+     */
+    private void buildHashMap() {
+        dataMap.clear();
+        for (DataItem item : dataList) {
+            dataMap.put(item.getId(), item);
+        }
+    }
+
+    /**
+     * Refreshes both data structures from the database.
+     * Maintains synchronization between ArrayList (for display) and HashMap (for lookup).
+     */
+    private void refreshDataStructures() {
+        dataList.clear();
+        dataList.addAll(dbHelper.getAllData());
+        buildHashMap();
+    }
+
+    /**
+     * O(1) lookup by ID using HashMap.
+     * Compared to ArrayList iteration which is O(n), this provides constant-time access.
+     *
+     * @param id The unique identifier of the item
+     * @return The DataItem if found, null otherwise
+     */
+    public DataItem findItemById(int id) {
+        return dataMap.get(id); // O(1) average case
+    }
+
+    // ==================== MERGESORT IMPLEMENTATION ====================
+
+    /**
+     * Stable MergeSort algorithm for sorting DataItems by title.
+     * Time Complexity: O(n log n)
+     * Space Complexity: O(n)
+     * Stability: Preserves relative order of equal elements
+     *
+     * @param list The ArrayList to sort
+     * @param left The starting index
+     * @param right The ending index
+     */
+    private void mergeSort(ArrayList<DataItem> list, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // Recursively sort both halves
+            mergeSort(list, left, mid);
+            mergeSort(list, mid + 1, right);
+
+            // Merge the sorted halves
+            merge(list, left, mid, right);
+        }
+    }
+
+    /**
+     * Merges two sorted subarrays into a single sorted array.
+     * This is the key operation that makes MergeSort stable.
+     *
+     * @param list The ArrayList containing the subarrays
+     * @param left The starting index of the first subarray
+     * @param mid The ending index of the first subarray
+     * @param right The ending index of the second subarray
+     */
+    private void merge(ArrayList<DataItem> list, int left, int mid, int right) {
+        // Calculate sizes of temporary arrays
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        // Create temporary arrays
+        ArrayList<DataItem> leftArray = new ArrayList<>(n1);
+        ArrayList<DataItem> rightArray = new ArrayList<>(n2);
+
+        // Copy data to temporary arrays
+        for (int i = 0; i < n1; i++) {
+            leftArray.add(list.get(left + i));
+        }
+        for (int j = 0; j < n2; j++) {
+            rightArray.add(list.get(mid + 1 + j));
+        }
+
+        // Merge the temporary arrays back
+        int i = 0, j = 0, k = left;
+
+        while (i < n1 && j < n2) {
+            // Compare by title (case-insensitive) - stable: use <= for left priority
+            if (leftArray.get(i).getTitle().compareToIgnoreCase(rightArray.get(j).getTitle()) <= 0) {
+                list.set(k, leftArray.get(i));
+                i++;
+            } else {
+                list.set(k, rightArray.get(j));
+                j++;
+            }
+            k++;
+        }
+
+        // Copy remaining elements of leftArray
+        while (i < n1) {
+            list.set(k, leftArray.get(i));
+            i++;
+            k++;
+        }
+
+        // Copy remaining elements of rightArray
+        while (j < n2) {
+            list.set(k, rightArray.get(j));
+            j++;
+            k++;
+        }
+    }
+}
+</script>
+
+<script type="text/plain" id="code-database-old">
+package com.example.cs360project2_mccormack;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private static final String DB_NAME = "project2.db";
+    private static final int DB_VERSION = 1;
+    private static final String TABLE_USERS = "users";
+    private static final String TABLE_DATA = "data";
+
+    public DatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_USERS + " (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_DATA + " (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
+        onCreate(db);
+    }
+
+    public boolean addUser(String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE username=?", new String[]{username});
+        if (cursor.getCount() > 0) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        values.put("password", password);
+        db.insert(TABLE_USERS, null, values);
+        return true;
+    }
+
+    public boolean checkUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USERS + " WHERE username=? AND password=?", new String[]{username, password});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    public void addData(String title, String description) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("title", title);
+        values.put("description", description);
+        db.insert(TABLE_DATA, null, values);
+    }
+
+    public ArrayList<DataItem> getAllData() {
+        ArrayList<DataItem> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_DATA, null);
+        while (cursor.moveToNext()) {
+            list.add(new DataItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+        }
+        cursor.close();
+        return list;
+    }
+
+    public void deleteData(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_DATA, "id=?", new String[]{String.valueOf(id)});
+    }
+}
+</script>
+
+<script type="text/plain" id="code-database-new">
+package com.example.cs360project2_mccormack;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.ArrayList;
+
+/**
+ * DatabaseHelper - Secure SQLite Database Manager
+ *
+ * FIXED - Normalized schema to 3NF with categories table
+ * FIXED - BCrypt password hashing (no plain text storage)
+ * FIXED - SQL parameterization to prevent injection
+ * FIXED - try-catch-finally blocks for resource cleanup
+ */
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private static final String TAG = "DatabaseHelper";
+    private static final String DB_NAME = "project2.db";
+    private static final int DB_VERSION = 2;
+
+    // Table names
+    private static final String TABLE_USERS = "users";
+    private static final String TABLE_CATEGORIES = "categories";  // FIXED - added for 3NF normalization
+    private static final String TABLE_INVENTORY = "inventory";
+
+    // Column names
+    private static final String COL_USER_ID = "id";
+    private static final String COL_USERNAME = "username";
+    private static final String COL_PASSWORD_HASH = "password_hash";  // FIXED - renamed from "password"
+    private static final String COL_CATEGORY_ID = "id";
+    private static final String COL_CATEGORY_NAME = "name";
+    private static final String COL_INVENTORY_ID = "id";
+    private static final String COL_TITLE = "title";
+    private static final String COL_DESCRIPTION = "description";
+    private static final String COL_CATEGORY_FK = "category_id";  // FIXED - foreign key to categories
+    private static final String COL_QUANTITY = "quantity";
+
+    private static final int BCRYPT_WORK_FACTOR = 12;  // FIXED - BCrypt cost factor
+
+    public DatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // FIXED - wrapped in try-catch for defensive programming
+        try {
+            db.execSQL("PRAGMA foreign_keys = ON;");
+
+            // FIXED - password_hash column instead of password
+            String createUsersTable = "CREATE TABLE " + TABLE_USERS + " ("
+                    + COL_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COL_USERNAME + " TEXT NOT NULL UNIQUE, "
+                    + COL_PASSWORD_HASH + " TEXT NOT NULL)";
+            db.execSQL(createUsersTable);
+
+            // FIXED - new categories table for 3NF normalization
+            String createCategoriesTable = "CREATE TABLE " + TABLE_CATEGORIES + " ("
+                    + COL_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COL_CATEGORY_NAME + " TEXT NOT NULL UNIQUE)";
+            db.execSQL(createCategoriesTable);
+
+            // FIXED - inventory table with foreign key to categories
+            String createInventoryTable = "CREATE TABLE " + TABLE_INVENTORY + " ("
+                    + COL_INVENTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + COL_TITLE + " TEXT NOT NULL, "
+                    + COL_DESCRIPTION + " TEXT, "
+                    + COL_CATEGORY_FK + " INTEGER, "
+                    + COL_QUANTITY + " INTEGER DEFAULT 0, "
+                    + "FOREIGN KEY (" + COL_CATEGORY_FK + ") REFERENCES "
+                    + TABLE_CATEGORIES + "(" + COL_CATEGORY_ID + ") ON DELETE SET NULL)";
+            db.execSQL(createInventoryTable);
+
+            db.execSQL("CREATE INDEX idx_inventory_category ON "
+                    + TABLE_INVENTORY + "(" + COL_CATEGORY_FK + ")");
+
+            Log.i(TAG, "Database tables created successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating database tables: " + e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVENTORY);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+            onCreate(db);
+        } catch (Exception e) {
+            Log.e(TAG, "Error upgrading database: " + e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            db.execSQL("PRAGMA foreign_keys = ON;");
+        }
+    }
+
+    // FIXED - BCrypt password hashing, parameterized query, try-catch-finally
+    public boolean addUser(String username, String password) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getWritableDatabase();
+
+            // FIXED - parameterized query prevents SQL injection
+            cursor = db.rawQuery(
+                    "SELECT " + COL_USER_ID + " FROM " + TABLE_USERS + " WHERE " + COL_USERNAME + " = ?",
+                    new String[]{username.trim()}
+            );
+
+            if (cursor.getCount() > 0) {
+                return false;
+            }
+
+            // FIXED - hash password with BCrypt before storage
+            String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt(BCRYPT_WORK_FACTOR));
+
+            ContentValues values = new ContentValues();
+            values.put(COL_USERNAME, username.trim());
+            values.put(COL_PASSWORD_HASH, passwordHash);
+
+            long result = db.insert(TABLE_USERS, null, values);
+            return result != -1;
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error adding user: " + e.getMessage(), e);
+            return false;
+        } finally {
+            // FIXED - always close cursor in finally block
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    // FIXED - BCrypt verification, parameterized query, try-catch-finally
+    public boolean checkUser(String username, String password) {
+        if (username == null || username.trim().isEmpty() || password == null || password.isEmpty()) {
+            return false;
+        }
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+
+            // FIXED - parameterized query prevents SQL injection
+            cursor = db.rawQuery(
+                    "SELECT " + COL_PASSWORD_HASH + " FROM " + TABLE_USERS + " WHERE " + COL_USERNAME + " = ?",
+                    new String[]{username.trim()}
+            );
+
+            if (cursor.moveToFirst()) {
+                String storedHash = cursor.getString(0);
+                // FIXED - verify password against hash instead of plain text comparison
+                return BCrypt.checkpw(password, storedHash);
+            }
+
+            return false;
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking user credentials: " + e.getMessage(), e);
+            return false;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    // FIXED - new method for normalized categories table
+    public long addCategory(String categoryName) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Category name cannot be null or empty");
+        }
+
+        SQLiteDatabase db = null;
+
+        try {
+            db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(COL_CATEGORY_NAME, categoryName.trim());
+            return db.insert(TABLE_CATEGORIES, null, values);
+        } catch (Exception e) {
+            Log.e(TAG, "Error adding category: " + e.getMessage(), e);
+            return -1;
+        }
+    }
+
+    // FIXED - new method for normalized categories table
+    public ArrayList<CategoryItem> getAllCategories() {
+        ArrayList<CategoryItem> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(
+                    "SELECT " + COL_CATEGORY_ID + ", " + COL_CATEGORY_NAME
+                    + " FROM " + TABLE_CATEGORIES + " ORDER BY " + COL_CATEGORY_NAME,
+                    null
+            );
+
+            while (cursor.moveToNext()) {
+                list.add(new CategoryItem(cursor.getInt(0), cursor.getString(1)));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error retrieving categories: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return list;
+    }
+
+    public int getCategoryIdByName(String categoryName) {
+        if (categoryName == null || categoryName.trim().isEmpty()) {
+            return -1;
+        }
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(
+                    "SELECT " + COL_CATEGORY_ID + " FROM " + TABLE_CATEGORIES + " WHERE " + COL_CATEGORY_NAME + " = ?",
+                    new String[]{categoryName.trim()}
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting category ID: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return -1;
+    }
+
+    public boolean deleteCategory(int categoryId) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = this.getWritableDatabase();
+            int rowsDeleted = db.delete(TABLE_CATEGORIES, COL_CATEGORY_ID + " = ?",
+                    new String[]{String.valueOf(categoryId)});
+            return rowsDeleted > 0;
+        } catch (Exception e) {
+            Log.e(TAG, "Error deleting category: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    // FIXED - supports normalized schema with category foreign key
+    public long addInventoryItem(String title, String description, int categoryId, int quantity) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
+
+        SQLiteDatabase db = null;
+
+        try {
+            db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(COL_TITLE, title.trim());
+            values.put(COL_DESCRIPTION, description != null ? description.trim() : null);
+
+            if (categoryId > 0) {
+                values.put(COL_CATEGORY_FK, categoryId);
+            }
+
+            values.put(COL_QUANTITY, Math.max(0, quantity));
+
+            return db.insert(TABLE_INVENTORY, null, values);
+        } catch (Exception e) {
+            Log.e(TAG, "Error adding inventory item: " + e.getMessage(), e);
+            return -1;
+        }
+    }
+
+    // Legacy method for backward compatibility
+    @Deprecated
+    public void addData(String title, String description) {
+        addInventoryItem(title, description, -1, 0);
+    }
+
+    // FIXED - LEFT JOIN to include category names from normalized table
+    public ArrayList<InventoryItem> getAllInventoryItems() {
+        ArrayList<InventoryItem> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+
+            String query = "SELECT i." + COL_INVENTORY_ID + ", i." + COL_TITLE + ", i." + COL_DESCRIPTION
+                    + ", i." + COL_CATEGORY_FK + ", c." + COL_CATEGORY_NAME + ", i." + COL_QUANTITY
+                    + " FROM " + TABLE_INVENTORY + " i"
+                    + " LEFT JOIN " + TABLE_CATEGORIES + " c ON i." + COL_CATEGORY_FK + " = c." + COL_CATEGORY_ID
+                    + " ORDER BY i." + COL_TITLE;
+
+            cursor = db.rawQuery(query, null);
+
+            while (cursor.moveToNext()) {
+                list.add(new InventoryItem(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.isNull(3) ? null : cursor.getInt(3),
+                        cursor.getString(4),
+                        cursor.getInt(5)
+                ));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error retrieving inventory items: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return list;
+    }
+
+    // Legacy method for backward compatibility
+    @Deprecated
+    public ArrayList<DataItem> getAllData() {
+        ArrayList<DataItem> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(
+                    "SELECT " + COL_INVENTORY_ID + ", " + COL_TITLE + ", " + COL_DESCRIPTION + " FROM " + TABLE_INVENTORY,
+                    null
+            );
+
+            while (cursor.moveToNext()) {
+                list.add(new DataItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error retrieving data: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return list;
+    }
+
+    public ArrayList<InventoryItem> getInventoryByCategory(int categoryId) {
+        ArrayList<InventoryItem> list = new ArrayList<>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+
+            String query = "SELECT i." + COL_INVENTORY_ID + ", i." + COL_TITLE + ", i." + COL_DESCRIPTION
+                    + ", i." + COL_CATEGORY_FK + ", c." + COL_CATEGORY_NAME + ", i." + COL_QUANTITY
+                    + " FROM " + TABLE_INVENTORY + " i"
+                    + " LEFT JOIN " + TABLE_CATEGORIES + " c ON i." + COL_CATEGORY_FK + " = c." + COL_CATEGORY_ID
+                    + " WHERE i." + COL_CATEGORY_FK + " = ?"
+                    + " ORDER BY i." + COL_TITLE;
+
+            // FIXED - parameterized query
+            cursor = db.rawQuery(query, new String[]{String.valueOf(categoryId)});
+
+            while (cursor.moveToNext()) {
+                list.add(new InventoryItem(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.isNull(3) ? null : cursor.getInt(3),
+                        cursor.getString(4),
+                        cursor.getInt(5)
+                ));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error retrieving inventory by category: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return list;
+    }
+
+    public boolean updateInventoryItem(int id, String title, String description, int categoryId, int quantity) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty");
+        }
+
+        SQLiteDatabase db = null;
+
+        try {
+            db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(COL_TITLE, title.trim());
+            values.put(COL_DESCRIPTION, description != null ? description.trim() : null);
+
+            if (categoryId > 0) {
+                values.put(COL_CATEGORY_FK, categoryId);
+            } else {
+                values.putNull(COL_CATEGORY_FK);
+            }
+
+            values.put(COL_QUANTITY, Math.max(0, quantity));
+
+            // FIXED - parameterized update
+            int rowsUpdated = db.update(TABLE_INVENTORY, values, COL_INVENTORY_ID + " = ?",
+                    new String[]{String.valueOf(id)});
+
+            return rowsUpdated > 0;
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating inventory item: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    public boolean updateQuantity(int id, int quantity) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(COL_QUANTITY, Math.max(0, quantity));
+
+            int rowsUpdated = db.update(TABLE_INVENTORY, values, COL_INVENTORY_ID + " = ?",
+                    new String[]{String.valueOf(id)});
+
+            return rowsUpdated > 0;
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating quantity: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    // FIXED - parameterized delete
+    public boolean deleteInventoryItem(int id) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = this.getWritableDatabase();
+            int rowsDeleted = db.delete(TABLE_INVENTORY, COL_INVENTORY_ID + " = ?",
+                    new String[]{String.valueOf(id)});
+            return rowsDeleted > 0;
+        } catch (Exception e) {
+            Log.e(TAG, "Error deleting inventory item: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    // Legacy method for backward compatibility
+    @Deprecated
+    public void deleteData(int id) {
+        deleteInventoryItem(id);
+    }
+
+    public int getInventoryCount() {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_INVENTORY, null);
+
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error getting inventory count: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return 0;
+    }
+
+    public boolean usernameExists(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return false;
+        }
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = this.getReadableDatabase();
+            // FIXED - parameterized query
+            cursor = db.rawQuery("SELECT 1 FROM " + TABLE_USERS + " WHERE " + COL_USERNAME + " = ?",
+                    new String[]{username.trim()});
+            return cursor.getCount() > 0;
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking username: " + e.getMessage(), e);
+            return false;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+}
+</script>
+
+<script>
+(function() {
+    var cache = {};
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function getCodeLines(elementId) {
+        var el = document.getElementById(elementId);
+        var lines = el.textContent.split('\n');
+        if (lines.length > 0 && lines[0].trim() === '') lines.shift();
+        if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+        return lines;
+    }
+
+    function computeDiff(oldLines, newLines) {
+        var m = oldLines.length, n = newLines.length;
+        var dp = [];
+        for (var i = 0; i <= m; i++) {
+            dp[i] = [];
+            for (var j = 0; j <= n; j++) dp[i][j] = 0;
+        }
+        for (var i = 1; i <= m; i++) {
+            for (var j = 1; j <= n; j++) {
+                if (oldLines[i - 1] === newLines[j - 1]) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        var result = [];
+        var i = m, j = n;
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0 && oldLines[i - 1] === newLines[j - 1]) {
+                result.unshift({ type: 'eq', oi: i, ni: j, text: oldLines[i - 1] });
+                i--; j--;
+            } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+                result.unshift({ type: 'add', ni: j, text: newLines[j - 1] });
+                j--;
+            } else {
+                result.unshift({ type: 'del', oi: i, text: oldLines[i - 1] });
+                i--;
+            }
+        }
+        return result;
+    }
+
+    window.toggleDiff = function(id) {
+        var container = document.getElementById('diff-' + id);
+        var btn = document.getElementById('btn-' + id);
+        if (container.style.display === 'none' || container.style.display === '') {
+            if (!cache[id]) {
+                btn.textContent = 'Computing diff...';
+                setTimeout(function() {
+                    buildDiffView(id);
+                    cache[id] = true;
+                    container.style.display = 'block';
+                    btn.innerHTML = '&#9650; Hide Code Changes';
+                }, 50);
+                return;
+            }
+            container.style.display = 'block';
+            btn.innerHTML = '&#9650; Hide Code Changes';
+        } else {
+            container.style.display = 'none';
+            btn.innerHTML = '&#9660; View Code Changes';
+        }
+    };
+
+    function buildDiffView(id) {
+        var oldLines = getCodeLines('code-' + id + '-old');
+        var newLines = getCodeLines('code-' + id + '-new');
+        var diff = computeDiff(oldLines, newLines);
+
+        var additions = 0, deletions = 0;
+        for (var k = 0; k < diff.length; k++) {
+            if (diff[k].type === 'add') additions++;
+            if (diff[k].type === 'del') deletions++;
+        }
+
+        var rows = '';
+        for (var k = 0; k < diff.length; k++) {
+            var d = diff[k];
+            if (d.type === 'eq') {
+                rows += '<tr class="diff-equal"><td class="diff-ln diff-oln">' + d.oi +
+                    '</td><td class="diff-code diff-oc">' + escapeHtml(d.text) +
+                    '</td><td class="diff-ln diff-nln">' + d.ni +
+                    '</td><td class="diff-code diff-nc">' + escapeHtml(d.text) + '</td></tr>';
+            } else if (d.type === 'del') {
+                rows += '<tr class="diff-remove"><td class="diff-ln diff-oln">' + d.oi +
+                    '</td><td class="diff-code diff-oc">' + escapeHtml(d.text) +
+                    '</td><td class="diff-ln diff-nln"></td><td class="diff-code diff-nc"></td></tr>';
+            } else {
+                rows += '<tr class="diff-add"><td class="diff-ln diff-oln"></td><td class="diff-code diff-oc">' +
+                    '</td><td class="diff-ln diff-nln">' + d.ni +
+                    '</td><td class="diff-code diff-nc">' + escapeHtml(d.text) + '</td></tr>';
+            }
+        }
+
+        var container = document.getElementById('diff-' + id);
+        container.innerHTML =
+            '<div class="diff-header"><span>Side-by-side comparison</span>' +
+            '<span class="diff-stats"><span class="diff-add-count">+' + additions +
+            '</span>&nbsp;&nbsp;<span class="diff-del-count">-' + deletions + '</span></span></div>' +
+            '<div class="diff-col-headers"><div>Original</div><div>Enhanced</div></div>' +
+            '<div class="diff-scroll"><table class="diff-table">' + rows + '</table></div>';
+    }
+})();
+</script>
 </body>
 </html>
